@@ -1,0 +1,24 @@
+{
+  "name": "chat-demo",
+  "version": "1.0.0",
+  "description": "WebSockets - Simple chat",
+  "main": "chat-server.js",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.16.3",
+    "websocket": "^1.0.26"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/ericwdq/chat-demo"
+  },
+  "keywords": [
+    "chat",
+    "websocket"
+  ],
+  "author": "Eric Wang",
+  "license": "ISC"
+}
