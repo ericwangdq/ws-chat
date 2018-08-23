@@ -112,10 +112,10 @@ wsServer.on("request", request => {
         history = history.slice(-100);
 
         // broadcast message to all connected clients
-        const json = JSON.stringify({ type: "message", data: obj });
-        for (let i = 0; i < clients.length; i++) {
-          clients[i].sendUTF(json);
-        }
+        const msg = JSON.stringify({ type: "message", data: obj });
+        clients.forEach(client => {
+          client.sendUTF(msg);
+        });
       }
     }
   });
