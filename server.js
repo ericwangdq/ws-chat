@@ -1,6 +1,3 @@
-// http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
-"use strict";
-
 // Optional. You will see this name in eg. 'ps' or 'top' command
 process.title = "node-ws-chat";
 
@@ -38,19 +35,19 @@ function htmlEntities(str) {
 // Array with some colors
 const colors = ["red", "green", "blue", "magenta", "purple", "plum", "orange"];
 // ... in random order
-colors.sort(function(a, b) {
+colors.sort((a, b) => {
   return Math.random() > 0.5;
 });
 
 /**
  * HTTP server
  */
-const server = http.createServer(function(request, response) {
+const server = http.createServer((request, response) => {
   // Not important for us. We're writing WebSocket server, not HTTP server
 });
-server.listen(webSocketsServerPort, function() {
+server.listen(webSocketsServerPort, () => {
   console.log(
-    new Date() + " Server is listening on port " + webSocketsServerPort
+    `${new Date()} Server is listening on port ${webSocketsServerPort}`
   );
 });
 
@@ -65,8 +62,8 @@ const wsServer = new webSocketServer({
 
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
-wsServer.on("request", function(request) {
-  console.log(new Date() + " Connection from origin " + request.origin + ".");
+wsServer.on("request", request => {
+  console.log(`${new Date()}  Connection from origin ${request.origin}.`);
 
   // accept connection - you should check 'request.origin' to make sure that
   // client is connecting from your website
@@ -77,7 +74,7 @@ wsServer.on("request", function(request) {
   let userName = null;
   let userColor = null;
 
-  console.log(new Date() + " Connection accepted.");
+  console.log(`${new Date()} Connection accepted.`);
 
   // send back chat history
   if (history.length > 0) {
@@ -85,7 +82,7 @@ wsServer.on("request", function(request) {
   }
 
   // user sent some message
-  connection.on("message", function(message) {
+  connection.on("message", message => {
     if (message.type === "utf8") {
       // accept only text
       if (userName === null) {
@@ -96,21 +93,12 @@ wsServer.on("request", function(request) {
         userColor = colors.shift();
         connection.sendUTF(JSON.stringify({ type: "color", data: userColor }));
         console.log(
-          new Date() +
-            " User is known as: " +
-            userName +
-            " with " +
-            userColor +
-            " color."
+          `${new Date()} User is known as: ${userName} with ${userColor} color.`
         );
       } else {
         // log and broadcast the message
         console.log(
-          new Date() +
-            " Received Message from " +
-            userName +
-            ": " +
-            message.utf8Data
+          `${new Date()} Received Message from ${userName}: ${message.utf8Data}`
         );
 
         // we want to keep history of all sent messages
@@ -133,10 +121,10 @@ wsServer.on("request", function(request) {
   });
 
   // user disconnected
-  connection.on("close", function(connection) {
+  connection.on("close", connection => {
     if (userName !== false && userColor !== false) {
       console.log(
-        new Date() + " Peer " + connection.remoteAddress + " disconnected."
+        `${new Date()} Peer ${connection.remoteAddress} disconnected.`
       );
       // remove user from the list of connected clients
       clients.splice(index, 1);

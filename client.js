@@ -28,29 +28,29 @@ if (!window.WebSocket) {
 // open connection
 const connection = new WebSocket(`ws://${ip}:${port}`);
 
-connection.addEventListener("open", function(e) {
+connection.addEventListener("open", e => {
   // first we want users to enter their names
   inputEl.removeAttribute("disabled");
   statusEl.innerHTML = "Choose name:";
 });
 
-connection.addEventListener("error", function(error) {
+connection.addEventListener("error", err => {
   // just in there were some problems with connection...
   contentEl.innerHTML =
     "<p>Sorry, but there's some problem with your connection, or the server is down.</p>";
 });
 
 // most important part - incoming messages
-connection.addEventListener("message", function(message) {
+connection.addEventListener("message", msg => {
   // try to parse JSON message. Because we know that the server
   // always returns JSON this should work without any problem but
   // we should make sure that the massage is not chunked or
   // otherwise damaged.
   var json;
   try {
-    json = JSON.parse(message.data);
+    json = JSON.parse(msg.data);
   } catch (e) {
-    console.log("Invalid JSON: ", message.data);
+    console.log("Invalid JSON: ", msg.data);
     return;
   }
 
@@ -77,6 +77,7 @@ connection.addEventListener("message", function(message) {
   } else if (json.type === "message") {
     // let the user write another message
     inputEl.removeAttribute("disabled");
+    inputEl.focus();
     addMessage(
       json.data.author,
       json.data.text,
@@ -91,7 +92,7 @@ connection.addEventListener("message", function(message) {
 /**
  * Send message when user presses Enter key
  */
-input.addEventListener("keydown", function(e) {
+input.addEventListener("keydown", e => {
   if (e.keyCode === 13) {
     const msg = inputEl.value;
 
@@ -119,7 +120,7 @@ input.addEventListener("keydown", function(e) {
  * respond to the in 3 seconds then show some error message
  * to notify the user that something is wrong.
  */
-setInterval(function() {
+setInterval(() => {
   if (connection.readyState !== 1) {
     statusEl.innerHTML = "ERROR";
     inputEl.setAttribute("disabled", "disabled");
